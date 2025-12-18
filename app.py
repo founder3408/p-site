@@ -129,4 +129,4 @@ def submit():
 if __name__ == '__main__':
     print("\n🚀 Servidor iniciado!")
     print("📍 Acesse: http://127.0.0.1:5000\n")
-    app.run(debug=True)
+    app.run(debug=True, port=5000, host='0.0.0.0')
