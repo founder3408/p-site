@@ -232,12 +232,28 @@
         .video-container {
             background: linear-gradient(180deg, rgba(255, 182, 193, 0.3) 0%, rgba(255, 182, 193, 0.6) 100%);
             border-radius: 1rem;
-            padding: 2rem;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 200px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            margin-bottom: 1rem;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.75rem;
+            border: none;
         }
 
         .play-btn {
@@ -256,16 +272,6 @@
         .video-text {
             color: hsl(340 30% 30%);
             font-weight: 500;
-        }
-
-        .video-link {
-            color: hsl(340 85% 55%);
-            font-size: 0.875rem;
-            text-decoration: none;
-        }
-
-        .video-link:hover {
-            text-decoration: underline;
         }
 
         .video-description {
@@ -545,23 +551,21 @@
             <h2 class="section-title">📹 Como Usar a Plataforma</h2>
             
             <div class="video-container">
-                <div class="play-btn">▶️</div>
-                <p class="video-text">Tutorial em vídeo</p>
-                <a href="#" class="video-link">Clique para assistir</a>
-            </div>
-            
-            <section>
+                <div class="video-wrapper">
+                    <iframe 
+                        src="https://www.youtube.com/embed/O2ZRT9dLkts" 
+                        title="YouTube video player - Tutorial das Princesinhas" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        referrerpolicy="strict-origin-when-cross-origin" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
                 <p class="video-description">
                     🌸 Assista ao vídeo tutorial para entender como solicitar e receber seus códigos 🌸
                 </p>
-            
-                <iframe width="560" height="315" 
-                    src="https://www.youtube.com/embed/O2ZRT9dLkts" 
-                    title="YouTube video player" 
-                    frameborder="0" 
-                    allowfullscreen>
-                </iframe>
-            </section>
+            </div>
+        </section>
 
         <!-- Footer -->
         <footer class="footer">
@@ -821,6 +825,20 @@
                 telefone: userPhone
             });
 
+            // Simula o backend para demonstração
+            // Quando seu backend estiver pronto, substitua este bloco pelo fetch real
+            setTimeout(() => {
+                const codigoGerado = Math.random().toString(36).substring(2, 10).toUpperCase();
+                showNotification('Sucesso! 🎉', `Seu código de acesso: ${codigoGerado}`, 'success');
+                
+                // Limpar formulário após sucesso
+                document.getElementById('accessForm').reset();
+                document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('selected'));
+                document.getElementById('streamName').value = '';
+                selectedPlatform = '';
+            }, 500);
+
+            /* === DESCOMENTE ESTA PARTE QUANDO SEU BACKEND ESTIVER PRONTO ===
             fetch('/submit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -847,6 +865,7 @@
                 console.error('Erro:', error);
                 showNotification('Erro ❌', 'Não foi possível conectar ao servidor.', 'error');
             });
+            */
         }
 
         // Carregar notificações ao iniciar
