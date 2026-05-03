@@ -84,12 +84,22 @@ def pegar_codigo_globoplay(email_input):
             if msg.get_content_type() == "text/html":
                 html = msg.get_payload(decode=True).decode(errors="ignore")
 
+        # Verifica se o assunto contém a frase da Globo e se o destinatário coincide
         if html and "Seu código para acessar a Conta Globo" in assunto and destinatario == email_input:
+            # Tenta encontrar o código de 6 dígitos dentro de uma div (comum em e-mails da Globo)
             match = re.search(
                 r"<div[^>]*>\s*(\d{6})\s*</div>",
                 html,
                 re.DOTALL | re.IGNORECASE
             )
+
+            # Se não encontrar na div, tenta buscar qualquer sequência de 6 dígitos isolada por espaços ou tags
+            if not match:
+                match = re.search(
+                    r"(?:>|\s)(\d{6})(?:<|\s)",
+                    html,
+                    re.DOTALL
+                )
 
             if match:
                 codigo = match.group(1)
