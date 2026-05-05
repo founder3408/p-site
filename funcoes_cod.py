@@ -50,6 +50,11 @@ def pegar_codigo_email_disney(email_input):
 
 
 def pegar_codigo_globoplay(email_input):
+    import re
+    import imaplib
+    import email
+    from email.header import decode_header
+
     EMAIL = "princesinhabot02@gmail.com"
     SENHA_APP = "gleygskpiqpvzxpi"
 
@@ -84,27 +89,23 @@ def pegar_codigo_globoplay(email_input):
             if msg.get_content_type() == "text/html":
                 html = msg.get_payload(decode=True).decode(errors="ignore")
 
-        # Verifica se o assunto contém a frase da Globo e se o destinatário coincide
-        if html and "Seu código para acessar a Conta Globo" in assunto and destinatario == email_input:
-            # Tenta encontrar o código de 6 dígitos dentro de uma div (comum em e-mails da Globo)
-            match = re.search(
-                r"<div[^>]*>\s*(\d{6})\s*</div>",
-                html,
-                re.DOTALL | re.IGNORECASE
-            )
+        # 🔥 VERIFICA SE É EMAIL DA GLOBO
+        if html and "código" in assunto and destinatario == email_input:
 
-            # Se não encontrar na div, tenta buscar qualquer sequência de 6 dígitos isolada por espaços ou tags
-            if not match:
-                match = re.search(
-                    r"(?:>|\s)(\d{6})(?:<|\s)",
-                    html,
-                    re.DOTALL
-                )
+            # 🔥 NOVA EXTRAÇÃO ROBUSTA
+            divs = re.findall(r'<div[^>]*>(.*?)</div>', html, re.DOTALL | re.IGNORECASE)
 
+            for div in divs:
+                match = re.search(r'(?<!\d)(\d{6})(?!\d)', div)
+                if match:
+                    imap.logout()
+                    return match.group(1)
+
+            # fallback geral
+            match = re.search(r'(?<!\d)(\d{6})(?!\d)', html)
             if match:
-                codigo = match.group(1)
                 imap.logout()
-                return codigo
+                return match.group(1)
 
     imap.logout()
     return None
