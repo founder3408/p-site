@@ -6,42 +6,358 @@
     <title>Suporte das Princesinhas</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(180deg, hsl(280 60% 80%) 0%, hsl(320 70% 85%) 30%, hsl(340 75% 85%) 60%, hsl(20 80% 85%) 100%);
-            min-height: 100vh; overflow-x: hidden; color: hsl(340 80% 40%);
+            background: linear-gradient(180deg, 
+                hsl(280 60% 80%) 0%, 
+                hsl(320 70% 85%) 30%,
+                hsl(340 75% 85%) 60%,
+                hsl(20 80% 85%) 100%
+            );
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: hsl(340 80% 40%);
         }
-        .container { max-width: 580px; margin: 0 auto; padding: 2rem 1rem; position: relative; z-index: 10; }
-        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); border-radius: 1rem; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.5); padding: 1.5rem; margin-bottom: 1.5rem; }
-        .header { background: linear-gradient(90deg, hsl(340 85% 55%) 0%, hsl(340 90% 65%) 100%); border-radius: 1rem; padding: 1rem 1.5rem; text-align: center; margin-bottom: 1.5rem; }
-        .header h1 { color: white; font-size: 1.5rem; font-weight: 700; }
-        .section-title { color: hsl(340 85% 55%); font-weight: 700; font-size: 1.125rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
-        .section-title.center { justify-content: center; }
-        .platforms { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin-top: 1rem; }
-        .platform-btn { background: linear-gradient(135deg, hsl(340 85% 55%) 0%, hsl(350 90% 60%) 100%); color: white; border: none; padding: 0.625rem 1.25rem; border-radius: 9999px; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3); }
-        .platform-btn.selected { transform: scale(1.05); box-shadow: 0 8px 25px rgba(236, 72, 153, 0.5); outline: 3px solid white; }
-        .form-group { margin-bottom: 1rem; }
-        .form-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
-        .form-input { width: 100%; padding: 0.75rem 1rem; border-radius: 9999px; border: 1px solid hsl(340 40% 90%); font-family: 'Poppins', sans-serif; }
-        .submit-btn { width: 100%; background: linear-gradient(90deg, hsl(340 85% 55%) 0%, hsl(340 90% 65%) 100%); color: white; border: none; padding: 0.875rem 1.5rem; border-radius: 0.75rem; font-weight: 600; cursor: pointer; margin-top: 0.5rem; }
-        .notifications-container { position: fixed; top: 20px; right: 20px; z-index: 1000; max-width: 400px; display: flex; flex-direction: column; gap: 10px; }
-        .notification { background: white; border-radius: 10px; padding: 15px; border-left: 5px solid hsl(340 85% 55%); box-shadow: 0 5px 15px rgba(0,0,0,0.1); animation: slideIn 0.3s ease-out; }
-        .notification.success { border-left-color: #22c55e; }
-        .notification.error { border-left-color: #ef4444; }
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+        /* Emojis flutuantes */
+        .floating-emojis {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .float-emoji {
+            position: absolute;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .float-emoji-reverse {
+            position: absolute;
+            animation: float-reverse 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes float-reverse {
+            0%, 100% { transform: translateY(-20px) rotate(-5deg); }
+            50% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 580px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-radius: 1rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(90deg, hsl(340 85% 55%) 0%, hsl(340 90% 65%) 100%);
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Títulos das seções */
+        .section-title {
+            color: hsl(340 85% 55%);
+            font-weight: 700;
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title.center {
+            justify-content: center;
+        }
+
+        /* Info box */
+        .info-box {
+            background: rgba(255, 182, 193, 0.3);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            border-left: 4px solid hsl(340 85% 55%);
+            margin-bottom: 1rem;
+        }
+
+        .info-box p {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: hsl(340 30% 30%);
+        }
+
+        .info-box ul {
+            list-style: none;
+            color: hsl(340 20% 50%);
+            font-size: 0.875rem;
+        }
+
+        .info-box ul li {
+            margin-bottom: 0.25rem;
+        }
+
+        /* Botões de plataforma */
+        .platforms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .platform-btn {
+            background: linear-gradient(135deg, hsl(340 85% 55%) 0%, hsl(350 90% 60%) 100%);
+            color: white;
+            border: none;
+            padding: 0.625rem 1.25rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .platform-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(236, 72, 153, 0.4);
+        }
+
+        .platform-btn.selected {
+            ring: 4px solid rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.5);
+            outline: 3px solid rgba(255, 255, 255, 0.7);
+        }
+
+        /* Formulário */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: hsl(340 30% 30%);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 9999px;
+            border: 1px solid hsl(340 40% 90%);
+            background: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.875rem;
+            color: hsl(340 30% 30%);
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: hsl(340 85% 55%);
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: hsl(340 20% 70%);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(90deg, hsl(340 85% 55%) 0%, hsl(340 90% 65%) 100%);
+            color: white;
+            border: none;
+            padding: 0.875rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+        }
+
+        /* Video container */
+        .video-container {
+            background: linear-gradient(180deg, rgba(255, 182, 193, 0.3) 0%, rgba(255, 182, 193, 0.6) 100%);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            margin-bottom: 1rem;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.75rem;
+            border: none;
+        }
+
+        .video-description {
+            color: hsl(340 20% 50%);
+            font-size: 0.875rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(90deg, hsl(340 85% 55%) 0%, hsl(340 90% 65%) 100%);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .footer h3 {
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .footer p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .footer a {
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer .copyright {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            border-left: 5px solid hsl(340 85% 55%);
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            color: hsl(340 85% 55%);
+            margin-bottom: 0.25rem;
+        }
+
+        .toast-message {
+            font-size: 0.875rem;
+            color: hsl(340 30% 40%);
+        }
     </style>
 </head>
 <body>
-    <div class="notifications-container" id="notificationsContainer"></div>
+    <!-- Emojis flutuantes -->
+    <div class="floating-emojis" id="floatingEmojis"></div>
 
     <div class="container">
+        <!-- Header -->
         <header class="header">
-            <h1>🌸 Suporte das Princesinhas 🌸</h1>
+            <h1>👑 Suporte das Princesinhas 👑</h1>
+            <p>✨ Seu streaming com todo cuidado e carinho ✨</p>
         </header>
 
+        <!-- Como Solicitar -->
         <section class="glass-card">
-            <h3 class="section-title">📱 Selecione a Plataforma</h3>
+            <h2 class="section-title">🔑 Como Solicitar seu Código</h2>
+            <div class="info-box">
+                <p>Siga os passos abaixo:</p>
+                <ul>
+                    <li>1. Selecione a plataforma desejada</li>
+                    <li>2. Digite seu email cadastrado</li>
+                    <li>3. Informe seu WhatsApp ou Telegram</li>
+                    <li>4. Clique em verificar e aguarde o código</li>
+                </ul>
+            </div>
+
+            <h3 class="section-title">📱 Plataformas Aceitas</h3>
             <div class="platforms">
                 <button type="button" class="platform-btn" data-platform="max" onclick="selectPlatform('max', this)">📺 Max</button>
                 <button type="button" class="platform-btn" data-platform="globoplay" onclick="selectPlatform('globoplay', this)">📺 Globoplay</button>
@@ -50,12 +366,13 @@
             </div>
         </section>
 
+        <!-- Formulário -->
         <section class="glass-card">
             <h2 class="section-title center">🔐 Acesso ao Código</h2>
             <form id="accessForm" onsubmit="handleSubmit(event)">
                 <div class="form-group">
-                    <label class="form-label">👤 Plataforma</label>
-                    <input type="text" class="form-input" id="streamName" placeholder="Selecione acima" readonly>
+                    <label class="form-label">👤 Nome Do Stream</label>
+                    <input type="text" class="form-input" id="streamName" placeholder="Selecione uma plataforma acima" readonly>
                 </div>
                 <div class="form-group">
                     <label class="form-label">✉️ Seu Email</label>
@@ -68,10 +385,56 @@
                 <button type="submit" id="submitBtn" class="submit-btn">🔐 Verificar Acesso 💕</button>
             </form>
         </section>
+
+        <!-- Video Tutorial -->
+        <section class="glass-card">
+            <h2 class="section-title">📹 Como Usar a Plataforma</h2>
+            <div class="video-container">
+                <div class="video-wrapper">
+                    <iframe 
+                        src="https://www.youtube.com/embed/O2ZRT9dLkts" 
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <p class="video-description">🌸 Assista ao vídeo tutorial para entender como solicitar seus códigos 🌸</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <h3>👑 Créditos 👑</h3>
+            <p>✨ Criado por: <a href="https://t.me/neyjrs" target="_blank">neyjrs</a> ✨</p>
+            <p>💫 Desenvolvido por: <a href="https://t.me/neyjrs" target="_blank">neyjrs</a> 💫</p>
+            <p class="copyright">🌸 © 2024 Caixa das Princesinhas - Todos os direitos reservados 🌸</p>
+        </footer>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <div id="toastTitle" class="toast-title"></div>
+        <div id="toastMessage" class="toast-message"></div>
     </div>
 
     <script>
         let selectedPlatform = '';
+
+        // Criar emojis flutuantes
+        const emojis = ["🌸", "🌷", "🐝", "🦋", "🌺", "🌹"];
+        const container = document.getElementById('floatingEmojis');
+        
+        for (let i = 0; i < 15; i++) {
+            const span = document.createElement('span');
+            span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            span.className = i % 2 === 0 ? 'float-emoji' : 'float-emoji-reverse';
+            span.style.left = Math.random() * 100 + '%';
+            span.style.top = Math.random() * 100 + '%';
+            span.style.fontSize = (Math.random() * 1 + 1) + 'rem';
+            span.style.animationDelay = (Math.random() * 2) + 's';
+            container.appendChild(span);
+        }
 
         function selectPlatform(platform, btn) {
             selectedPlatform = platform;
@@ -85,15 +448,15 @@
                 'globo_atualizar': 'Atualizar Globo'
             };
             document.getElementById('streamName').value = names[platform];
+            showToast('Plataforma selecionada ✨', `Você selecionou: ${names[platform]}`);
         }
 
-        function showNotification(title, message, type = 'info') {
-            const container = document.getElementById('notificationsContainer');
-            const div = document.createElement('div');
-            div.className = `notification ${type}`;
-            div.innerHTML = `<strong>${title}</strong><br>${message}`;
-            container.appendChild(div);
-            setTimeout(() => div.remove(), 10000);
+        function showToast(title, message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastTitle').innerText = title;
+            document.getElementById('toastMessage').innerHTML = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 6000);
         }
 
         async function handleSubmit(e) {
@@ -104,12 +467,13 @@
             const submitBtn = document.getElementById('submitBtn');
 
             if (!selectedPlatform) {
-                showNotification('Erro ❌', 'Selecione uma plataforma primeiro.', 'error');
+                showToast('Erro ❌', 'Por favor, selecione uma plataforma.');
                 return;
             }
 
             submitBtn.disabled = true;
             submitBtn.innerText = '⏳ Verificando...';
+            showToast('Aguarde ✨', 'Verificando seu acesso...');
 
             try {
                 const response = await fetch('/submit', {
@@ -125,16 +489,16 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    showNotification('✅ Sucesso! 🎉', `Seu código de acesso: <strong>${data.codigo}</strong>`, 'success');
+                    showToast('✅ Sucesso! 🎉', `Seu código de acesso: <strong>${data.codigo}</strong>`);
                     document.getElementById('accessForm').reset();
                     selectedPlatform = '';
                     document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('selected'));
+                    document.getElementById('streamName').value = '';
                 } else {
-                    showNotification('Erro ❌', data.message || 'Código não encontrado.', 'error');
+                    showToast('Erro ❌', data.message || 'Código não encontrado.');
                 }
             } catch (error) {
-                console.error(error);
-                showNotification('Erro ❌', 'Falha na conexão com o servidor.', 'error');
+                showToast('Erro ❌', 'Falha na conexão com o servidor.');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerText = '🔐 Verificar Acesso 💕';
