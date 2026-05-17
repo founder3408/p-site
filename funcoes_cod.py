@@ -25,9 +25,8 @@ def pegar_codigo_email_disney(email_input):
         remetente = msg.get("From", "Não informado")
         destinatario = msg.get("Delivered-To") or msg.get("To") or "Não informado"
 
-        assunto, encoding = decode_header(msg.get("Subject"))[0]
-        if isinstance(assunto, bytes):
-            assunto = assunto.decode(encoding or "utf-8", errors="ignore")
+        # Decode possibly encoded subject to readable string
+        assunto = str(email.header.make_header(decode_header(msg.get("Subject", ""))))
 
         html = None
         if msg.is_multipart():
@@ -39,10 +38,12 @@ def pegar_codigo_email_disney(email_input):
             if msg.get_content_type() == "text/html":
                 html = msg.get_payload(decode=True).decode(errors="ignore")
 
+        # Verify this is the Disney access‑code email for the given recipient
         if html and "Seu código de acesso único" in html and destinatario == email_input:
-            match = re.search(r"<td[^>]*>\s*(\d{6})\s*</td>", html, re.DOTALL)
-            if match:
-                codigo = match.group(1)
+            # Find the first 5‑6 digit number that appears between HTML tags (the code itself)
+            matches = re.findall(r">\s*(\d{5,6})\s*<", html)
+            if matches:
+                codigo = matches[0]
                 imap.logout()
                 return codigo
 
